@@ -3,6 +3,8 @@
 
 # Pasta de compilação
 bin/
+.vscode/
+*.class
 
 # Arquivos de IDE
 .vscode/
