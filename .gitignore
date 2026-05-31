@@ -1,0 +1,12 @@
+# Arquivos compilados
+*.class
+
+# Pasta de compilação
+bin/
+
+# Arquivos de IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
