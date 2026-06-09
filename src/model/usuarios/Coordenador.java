@@ -4,8 +4,12 @@ import java.util.ArrayList;
 
 public class Coordenador extends Usuario {
 
-    private final ArrayList<Coordenador> coordenadores = new ArrayList<>();
-    private final String area;
+    private static final ArrayList<Coordenador> coordenadores = new ArrayList<>();
+    private String area;
+
+    public Coordenador() {
+        super();
+    }
 
     public Coordenador(String nome, String area, String login, String password) {
         super(nome, login, password);
@@ -16,61 +20,58 @@ public class Coordenador extends Usuario {
         return area;
     }
 
-    public void ativarUsuario() {} //implementar
+    public void desativarUsuario() {} //implementar, setar o status para desativado
 
-    public void desativarUsuario() {} //implementar
-
-    public void removerUsuario() {} //implementar
+    public void removerProjeto() {} //implementar, usar como referencia o nome do projeto para remover do array
 
     public void consultarRelatorio() {} //implementar
 
-    @Override
-    public void cadastro(String nome, String curso, String login, String password) {
-        
+    /*
+    Cadastrando-se no sistema... o usuário irá criar seu login e senha 
+        mostrar os sysout's no main
+        criar a variavel auxiliar 'loginSucesso' para controle do while
+    */ 
+    @Override 
+    public boolean cadastro(String nome, String area, String login, String password) throws IllegalArgumentException {
+        if (nome == null || nome.isBlank() || nome.matches("[\\p{L} ]+")) {
+            throw new IllegalArgumentException("Nome inválido!");
+        }
+
+        if (area == null || area.isBlank() || !area.matches("[\\p{L} ]+")) {
+            throw new IllegalArgumentException("area inválido!");
+        }
+
+        if (login == null || login.isBlank()) {
+            throw new IllegalArgumentException("Login inválido!");
+        }
+
+        if (password == null || password.length() < 6 || password.length() > 30) {
+            throw new IllegalArgumentException("Senha deve ter entre 6 e 30 caracteres!");
+        }
+
         for (Coordenador coord : coordenadores) {
-            if (nome.isEmpty() || nome.matches("[a-zA-Z]+")) {
-                // throw new IllegalArgumentsException("Digite um nome válido! Apenas letras são permitidas!");
-                return;
-            } 
-            if (curso.isEmpty() || curso.matches("[a-zA-Z]+")) {
-                // throw new IllegalArgumentsException("Digite um nome válido! Apenas letras são permitidas!");
-                return;
-            }
             if (login.equals(coord.getLogin())) {
-                // throw new IllegalArgumentsException("O login acima já existe!");
-                return;
-            }
-            if (password.length() < 6 || password.length() > 30) {
-                // throw new IllegalArgumentsException("A senha deve ter entre 6 e 30 caracteres!");
-                return;
+                throw new IllegalArgumentException("Login já cadastrado!");
             }
         }
-        Coordenador coordenador = new Coordenador(nome, curso, login, password);
+        
+        Coordenador coordenador = new Coordenador(nome, area, login, password);
         coordenadores.add(coordenador);
-        System.out.println("Cadastro realizado com sucesso!");
-
+        return true;
     }
 
     @Override
-    public void login(String login, String password) {
+    public boolean login(String login, String password) {
+        if (login == null || password == null) {
+            return false;
+        }
 
         for (Coordenador coord : coordenadores) {
-            if (login.equals(coord.getLogin()) || password.equals(coord.getPassword())) {
-                System.out.println("Login realizado com sucesso!");
-                return;
-            }
-            else {
-                System.out.println("Login ou senha inválido!");
-                return;
+            if (login.equals(coord.getLogin()) && password.equals(coord.getPassword())) {
+                return true;
             }
         }
-        System.out.println("Bem vindo!");
-
-    }
-
-    @Override
-    public void logout() {
-        
+        return false;
     }
 
 }
