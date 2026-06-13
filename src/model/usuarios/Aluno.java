@@ -1,9 +1,11 @@
 package model.usuarios;
+import exceptions.LimiteDeVagasException;
 import java.util.ArrayList;
+import model.projetos.ProjetoPesquisa;
 
 public class Aluno extends Usuario {
 
-    private static final ArrayList<Aluno> alunos = new ArrayList<>(); //verificar a logica desse array e o array das classes Professor e Coordenador
+    private static final ArrayList<Aluno> alunos = new ArrayList<>();
     private String curso;
     private AlunoStatus status;
 
@@ -36,16 +38,51 @@ public class Aluno extends Usuario {
         PARTICIPACAO_CONCLUIDA,
         PARTICIPACAO_CANCELADA
     }
+    
+    // o coordenador poderá acessar as solicitações
+    public boolean solicitarParticipacao(ProjetoPesquisa projeto) throws LimiteDeVagasException{
+        if (projeto == null) throw new IllegalArgumentException("Projeto inválido!"); 
+        if (status == AlunoStatus.INSCRITO || status == AlunoStatus.EM_ANALISE) return false;
+        
+        if (projeto.possuiVagas()) {
+            return projeto.adicionarSolicitacao(this);
+        }
+        return false;
+    } 
 
+    public boolean desistir(ProjetoPesquisa projeto) {
+        if (projeto == null) {
+            throw new IllegalArgumentException("Projeto inválido!");
+        }
 
-    public void solicitarParticipacao() {} //implementar, o coordenador deve acessar as solicitações
+        // remove o aluno do arry de participantes
+        boolean removido = projeto.removerParticipante(this.getNome());
+        if (removido) {
+            this.setStatus(AlunoStatus.PARTICIPACAO_CANCELADA);
+            //atualiza o status do aluno
+        }
+        return removido;
+    }
 
-    public void desistir() {} //implementar, chamar cancelarPariticipacao
+    // mostra os projetos em que o aluno está inscrito
+    public void meusProjetos() {
+        ArrayList<ProjetoPesquisa> inscricoes = new ArrayList<>();
+            for (ProjetoPesquisa projeto : ProjetoPesquisa.getProjetos()) {
+                if (projeto.contemParticipante(this)) {
+                    inscricoes.add(projeto);
+                }
+            }
 
-    public void meusProjetos() {} //implementar, 
+        if (inscricoes.isEmpty()) {
+            System.out.println("O aluno  " + this.getNome() + "não está inscrito em nenhum projeto!");
+            return;
+        }
 
-    public void gerarRelatorio() {} //implementar, gravar em um txt
-
+        System.out.println("Minhas inscrições:");
+            for (ProjetoPesquisa p : inscricoes) {
+                System.out.println(" " + p.getNome() + " (Orientador: " + p.getOrientador().getNome() + ")");
+            }
+    } 
     
     /*
     Cadastrando-se no sistema... o usuário irá criar seu login e senha 
@@ -94,5 +131,4 @@ public class Aluno extends Usuario {
         }
         return false;
     }
-
 } 

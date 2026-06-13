@@ -1,6 +1,8 @@
 package model.usuarios;
 
 import java.util.ArrayList;
+import model.projetos.ProjetoPesquisa;
+import model.relatorio.Relatorio;
 
 public class Coordenador extends Usuario {
 
@@ -20,11 +22,86 @@ public class Coordenador extends Usuario {
         return area;
     }
 
-    public void desativarUsuario() {} //implementar, setar o status para desativado
+    public void desativarUsuario(Aluno aluno) {
+        if (aluno == null) {
+            throw new IllegalArgumentException("Aluno inválido!");
+        }
+        aluno.setStatus(Aluno.AlunoStatus.DESATIVADO);
+    }
 
-    public void removerProjeto() {} //implementar, usar como referencia o nome do projeto para remover do array
+    public void ativarUsuario(Aluno aluno) {
+        if (aluno == null) {
+            throw new IllegalArgumentException("Aluno inválido!");            
+        }
+        aluno.setStatus(Aluno.AlunoStatus.ATIVO);
+    }
 
-    public void consultarRelatorio() {} //implementar
+    public boolean excluirProjeto(ProjetoPesquisa projeto) {
+        if (projeto == null) {
+            throw new IllegalArgumentException("Projeto inválido!");
+        }
+
+        // busca o projeto na lista global
+        ProjetoPesquisa projetoEncontrado = null;
+        for (ProjetoPesquisa p : ProjetoPesquisa.getProjetos()) {
+            if (p == projeto || (p.getNome() != null && p.getNome().equals(projeto.getNome()))) {
+                projetoEncontrado = p;
+                break;
+            }
+        }
+
+        if (projetoEncontrado == null) {
+            return false;
+        }
+
+        // remove e atualiza status dos participantes
+        for (Aluno participante : projetoEncontrado.getParticipantes()) {
+            if (participante != null) {
+                participante.setStatus(Aluno.AlunoStatus.PARTICIPACAO_CANCELADA);
+            }
+        }
+        // exclue todos os participantes do projeto
+        projetoEncontrado.getParticipantes().clear();
+
+        // remove e atualiza status dos solicitantes
+        for (Aluno solicitante : projetoEncontrado.getSolicitantes()) {
+            if (solicitante != null) {
+                solicitante.setStatus(Aluno.AlunoStatus.ATIVO);
+            }
+        }
+        // exclue todas as solicitações da projeto que será excluído
+        projetoEncontrado.getSolicitantes().clear();
+
+        // remove o projeto do arraylist de projetos
+        ProjetoPesquisa.getProjetos().remove(projetoEncontrado);
+        return true;
+    }
+
+    public void consultarRelatorio() {
+        // a variavél 'projetos' aqui, esta referenciando o array statico de projetos em ProjetoPesquisa
+        ArrayList<ProjetoPesquisa> projetos = ProjetoPesquisa.getProjetos();
+        if (projetos.isEmpty()) {
+            System.out.println("Nenhum projeto cadastrado!");
+            return;
+        }
+
+        System.out.println("Relatórios por projeto:");
+        for (ProjetoPesquisa projeto : projetos) {
+            System.out.println("Projeto: " + projeto.getNome());
+            ArrayList<Relatorio> relatorios = projeto.getRelatorios();
+
+            if (relatorios.isEmpty()) {
+                System.out.println("Nenhum relatório enviado!");
+                continue;
+            }
+
+            for (Relatorio relatorio : relatorios) {
+                System.out.println("Autor: " + relatorio.getAutor().getNome());
+                System.out.println("Conteúdo: " + relatorio.getConteudo());
+                System.out.println("Validade: " + (relatorio.isValido() ? "Válido" : "Inválido"));
+            }
+        }
+    }
 
     /*
     Cadastrando-se no sistema... o usuário irá criar seu login e senha 

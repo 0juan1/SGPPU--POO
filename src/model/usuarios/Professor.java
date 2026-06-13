@@ -1,6 +1,9 @@
 package model.usuarios;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import model.projetos.ProjetoPesquisa;
+import model.relatorio.Relatorio;
 
 public class Professor extends Usuario {
 
@@ -20,21 +23,140 @@ public class Professor extends Usuario {
         return area;
     }
 
-    public void criarProjeto() {} //implementar, quando um projeto for criado, um ProjetoPesquisa é instanciado e adicionado ao array de projetos
+    public void criarProjeto(String nome, Professor orientador, String area, String descricao ,LocalDate datainicio) {
+        // ao criar um projeto, instancia-se um ProjetoPesquisa e adiciona ao array de projetos
+        if (nome == null || nome.isBlank()) {
+            throw new IllegalArgumentException("Nome inválido!");
+        }
+        if (orientador == null) {
+            throw new IllegalArgumentException("Nome inválido!");
+        }
+        if (area == null || area.isBlank()) {
+            throw new IllegalArgumentException("Área do projeto inválida!");
+        }
+        if (descricao == null || descricao.isBlank()) {
+            throw new IllegalArgumentException("Descrição do projeto inválida!");
+        }
+        if (datainicio == null) {
+            throw new IllegalArgumentException("Data de início inválida!");
+        }
 
-    public void editarProjeto() {} //implementar
+        ProjetoPesquisa projeto = new ProjetoPesquisa(nome, orientador, area, descricao, datainicio);
+        ProjetoPesquisa.getProjetos().add(projeto);
+    } 
 
-    public void acompanharProgressos() {} //implementar
+    public ProjetoPesquisa editarProjeto(String nomeProjeto, String novoNome, Professor novoOrientador, String novaArea, String novaDescricao, LocalDate novaDataInicio) {
+        // busca o projeto pelo nome e atualiza os campos fornecidos
+        if (nomeProjeto == null || nomeProjeto.isBlank()) {
+            throw new IllegalArgumentException("Nome do projeto inválido!");
+        }
+        
+        //variavel auxiliar para armazenar o projeto encontrado
+        ProjetoPesquisa projetoEncontrado = null;
+            for (ProjetoPesquisa projeto : ProjetoPesquisa.getProjetos()) {
+                if (nomeProjeto.equals(projeto.getNome())) {
+                    projetoEncontrado = projeto;
+                    break;
+                }
+            }
 
-    public void validarRelatorios() {} //implementar
+            if (projetoEncontrado == null) {
+                throw new IllegalArgumentException("Projeto não encontrado: " + nomeProjeto);
+            }
+
+            if (novoNome != null && !novoNome.isBlank()) {
+                projetoEncontrado.setNome(novoNome);
+            }
+
+            if (novoOrientador != null) {
+                projetoEncontrado.setOrientador(novoOrientador);
+            }
+
+            if (novaArea != null && !novaArea.isBlank()) {
+                projetoEncontrado.setArea(novaArea);
+            }
+
+            if (novaDescricao != null && !novaDescricao.isBlank()) {
+                projetoEncontrado.setDescricao(novaDescricao);
+            }
+            
+            if (novaDataInicio != null) {
+                projetoEncontrado.setDataInicio(novaDataInicio);
+            }
+        return projetoEncontrado; 
+    } 
+
+    public void acompanharProgressos(String nomeProjeto) {
+        // busca o projeto pelo nome e exibe o progresso dos participantes
+        if (nomeProjeto == null || nomeProjeto.isBlank()) {
+            throw new IllegalArgumentException("Nome do projeto inválido!");
+        }
+
+        ProjetoPesquisa projetoEncontrado = null;
+        for (ProjetoPesquisa projeto : ProjetoPesquisa.getProjetos()) {
+            if (nomeProjeto.equals(projeto.getNome())) {
+                projetoEncontrado = projeto;
+                break;
+            }
+        }
+
+        if (projetoEncontrado == null) {
+            throw new IllegalArgumentException("Projeto não encontrado: " + nomeProjeto);
+        }
+
+        System.out.println("Acompanhando progresso do projeto: " + projetoEncontrado.getNome());
+        System.out.println("Orientador: " + projetoEncontrado.getOrientador().getNome());
+        System.out.println("Área: " + projetoEncontrado.getArea());
+        System.out.println("Data de início: " + projetoEncontrado.getDataInicio());
+        projetoEncontrado.exibirParticipantes();
+    } 
+
+    public void validarRelatorios(String nomeProjeto) {
+        if (nomeProjeto == null || nomeProjeto.isBlank()) {
+            throw new IllegalArgumentException("Nome do projeto inválido!");
+        }
+
+        //variavel auxiliar para buscar o projeto no array de projetos
+        ProjetoPesquisa projetoEncontrado = null;
+        for (ProjetoPesquisa projeto : ProjetoPesquisa.getProjetos()) {
+            if (nomeProjeto.equals(projeto.getNome())) {
+                projetoEncontrado = projeto;
+                break;
+            }
+        }
+
+        if (projetoEncontrado == null) {
+            throw new IllegalArgumentException("Projeto não encontrado!");
+        }
+
+        //adiciona o relatorio ao array de relatorios do projeto
+        ArrayList<Relatorio> relatoriosProjeto = projetoEncontrado.getRelatorios();
+
+        if (relatoriosProjeto.isEmpty()) {
+            System.out.println("Nenhum relatório foi enviado para o projeto!");
+            return;
+        }
+
+        System.out.println("Validando relatórios do projeto: " + nomeProjeto);
+        for (Relatorio relatorio : relatoriosProjeto) {
+            boolean valido = relatorio.isValido();
+            System.out.println("Autor: " + relatorio.getAutor().getNome());
+            //Verificar os operadores ternarios
+            System.out.println("Conteúdo: " + (relatorio.getConteudo() == null ? "Nulo" : relatorio.getConteudo()));
+            System.out.println("Status: " + (valido ? "Válido" : "Inválido"));
+            if (!valido) {
+                System.out.println("Relatório sem conteúdo válido!");
+            }
+        }
+    }
     
-    /*
-    Cadastrando-se no sistema... o usuário irá criar seu login e senha 
-        mostrar os sysout's no main
-        criar a variavel auxiliar 'loginSucesso' para controle do while
-    */ 
     @Override 
     public boolean cadastro(String nome, String area, String login, String password) throws IllegalArgumentException {
+        /*
+        Cadastrando-se no sistema... o usuário irá criar seu login e senha 
+        mostrar os sysout's no main
+        criar a variavel auxiliar 'loginSucesso' para controle do while
+        */ 
         if (nome == null || nome.isBlank() || nome.matches("[\\p{L} ]+")) {
             throw new IllegalArgumentException("Nome inválido!");
         }
@@ -64,6 +186,7 @@ public class Professor extends Usuario {
 
     @Override
     public boolean login(String login, String password) {
+        //Verifica se o login e senha são iguais aos fornecidos no cadastro 
         if (login == null || password == null) {
             return false;
         }
