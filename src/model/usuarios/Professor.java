@@ -173,7 +173,7 @@ public class Professor extends Usuario {
         criar a variavel auxiliar 'loginSucesso' para controle do while
         */ 
 
-        if (nome == null || nome.isBlank() || nome.matches("[\\p{L} ]+")) {
+        if (nome == null || nome.isBlank() || !nome.matches("[\\p{L} ]+")) {
             throw new IllegalArgumentException("Nome inválido!");
         }
 

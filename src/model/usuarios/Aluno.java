@@ -94,7 +94,7 @@ public class Aluno extends Usuario {
     */ 
     @Override 
     public boolean cadastro(String nome, String curso, String login, String password) throws IllegalArgumentException {
-        if (nome == null || nome.isBlank() || nome.matches("[\\p{L} ]+")) {
+        if (nome == null || nome.isBlank() || !nome.matches("[\\p{L} ]+")) {
             throw new IllegalArgumentException("Nome inválido!");
         }
 

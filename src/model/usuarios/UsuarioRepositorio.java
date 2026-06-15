@@ -55,6 +55,11 @@ public class UsuarioRepositorio {
                     .append(escapeCampo(professor.getArea())).append('|')
                     .append(escapeCampo(professor.getLogin())).append('|')
                     .append(escapeCampo(professor.getPassword()));
+            case Coordenador coordenador -> builder.append("COORDENADOR|")
+                    .append(escapeCampo(coordenador.getNome())).append('|')
+                    .append(escapeCampo(coordenador.getArea())).append('|')
+                    .append(escapeCampo(coordenador.getLogin())).append('|')
+                    .append(escapeCampo(coordenador.getPassword()));
             default -> throw new IllegalArgumentException("Tipo de usuário não suportado para gravação.");
         }
         return builder.toString();
@@ -102,6 +107,7 @@ public class UsuarioRepositorio {
         return switch (tipo) {
             case "ALUNO" -> new Aluno(nome, cursoOuArea, login, password);
             case "PROFESSOR" -> new Professor(nome, cursoOuArea, login, password);
+            case "COORDENADOR" -> new Coordenador(nome, cursoOuArea, login, password);
             default -> null;
         };
     }
