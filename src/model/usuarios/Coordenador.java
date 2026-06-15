@@ -1,8 +1,11 @@
 package model.usuarios;
 
 import java.util.ArrayList;
+import model.notificacao.NotificacaoMensagem;
+import model.notificacao.NotificacaoRepositorio;
 import model.projetos.ProjetoPesquisa;
 import model.relatorio.Relatorio;
+
 
 public class Coordenador extends Usuario {
 
@@ -21,19 +24,19 @@ public class Coordenador extends Usuario {
     public String getArea() {
         return area;
     }
+    
+    public void ativarUsuario(Aluno aluno) {
+        if (aluno == null) {
+            throw new IllegalArgumentException("Aluno inválido!");            
+        }
+        aluno.setStatus(Aluno.AlunoStatus.ATIVO);
+    }
 
     public void desativarUsuario(Aluno aluno) {
         if (aluno == null) {
             throw new IllegalArgumentException("Aluno inválido!");
         }
         aluno.setStatus(Aluno.AlunoStatus.DESATIVADO);
-    }
-
-    public void ativarUsuario(Aluno aluno) {
-        if (aluno == null) {
-            throw new IllegalArgumentException("Aluno inválido!");            
-        }
-        aluno.setStatus(Aluno.AlunoStatus.ATIVO);
     }
 
     public boolean excluirProjeto(ProjetoPesquisa projeto) {
@@ -69,7 +72,7 @@ public class Coordenador extends Usuario {
                 solicitante.setStatus(Aluno.AlunoStatus.ATIVO);
             }
         }
-        // exclue todas as solicitações da projeto que será excluído
+        // exclue todas as solicitações do projeto que será excluído
         projetoEncontrado.getSolicitantes().clear();
 
         // remove o projeto do arraylist de projetos
@@ -94,7 +97,7 @@ public class Coordenador extends Usuario {
                 System.out.println("Nenhum relatório enviado!");
                 continue;
             }
-
+            
             for (Relatorio relatorio : relatorios) {
                 System.out.println("Autor: " + relatorio.getAutor().getNome());
                 System.out.println("Conteúdo: " + relatorio.getConteudo());
@@ -102,7 +105,12 @@ public class Coordenador extends Usuario {
             }
         }
     }
-
+    
+    public void criarNotificacao(String titulo, String conteudo) {
+        NotificacaoMensagem notificacao = new NotificacaoMensagem(titulo, conteudo, this.nome);
+        NotificacaoRepositorio.adicionar(notificacao);
+    }
+    
     /*
     Cadastrando-se no sistema... o usuário irá criar seu login e senha 
         mostrar os sysout's no main
@@ -150,5 +158,6 @@ public class Coordenador extends Usuario {
         }
         return false;
     }
+
 
 }

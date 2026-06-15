@@ -1,4 +1,5 @@
 package model.usuarios;
+
 import exceptions.LimiteDeVagasException;
 import java.util.ArrayList;
 import model.projetos.ProjetoPesquisa;
@@ -29,6 +30,7 @@ public class Aluno extends Usuario {
     public void setStatus(AlunoStatus status) {
         this.status = status;
     }
+
     
     public enum AlunoStatus {
         ATIVO,
@@ -49,7 +51,7 @@ public class Aluno extends Usuario {
         }
         return false;
     } 
-
+    
     public boolean desistir(ProjetoPesquisa projeto) {
         if (projeto == null) {
             throw new IllegalArgumentException("Projeto inválido!");
@@ -74,10 +76,11 @@ public class Aluno extends Usuario {
             }
 
         if (inscricoes.isEmpty()) {
-            System.out.println("O aluno  " + this.getNome() + "não está inscrito em nenhum projeto!");
+            System.out.println("O aluno  " + this.getNome() + "Você não está inscrito em nenhum projeto!");
             return;
         }
 
+        // imprimindo os projetos que estiver inscrito
         System.out.println("Minhas inscrições:");
             for (ProjetoPesquisa p : inscricoes) {
                 System.out.println(" " + p.getNome() + " (Orientador: " + p.getOrientador().getNome() + ")");
@@ -123,7 +126,7 @@ public class Aluno extends Usuario {
         if (login == null || password == null) {
             return false;
         }
-
+        
         for (Aluno alun : alunos) {
             if (login.equals(alun.getLogin()) && password.equals(alun.getPassword())) {
                 return true;
@@ -131,4 +134,5 @@ public class Aluno extends Usuario {
         }
         return false;
     }
+
 } 
