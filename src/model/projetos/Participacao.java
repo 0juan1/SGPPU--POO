@@ -24,21 +24,22 @@ public class Participacao {
                 }
             }
         return false; //printar no main: "Participante não encontrado!"
-    } //atualizar o status no main
+    }
 
 
-    // o professor irá chamar esse método 
+    // o professor irá chamar esse método para confirmar que o aluno concluiu o projeto
     public boolean concluirParticipacao(String nome) {
         Iterator<Aluno> it = participantes.iterator();
             while(it.hasNext()) {
                 Aluno aluno = it.next();
                 if (nome.equals(aluno.getNome())) {
                     it.remove();
+                    aluno.setStatus(AlunoStatus.PARTICIPACAO_CONCLUIDA);
                     return true; //printar no main: System.out.println("O aluno " + aluno.getNome() + " concluiu o prejeto sucesso!");
                 }
             }
         return false; 
-    } //atualizar o status no main
+    }
 
     public void exibirParticipantes() {
         System.out.println("PARTICIPANTES:");
@@ -56,8 +57,6 @@ public class Participacao {
             }
         }
         System.out.println("Participante não encontrado!");
-
+        
     }
-
-
 }
