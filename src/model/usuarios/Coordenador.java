@@ -6,7 +6,6 @@ import model.notificacao.NotificacaoRepositorio;
 import model.projetos.ProjetoPesquisa;
 import model.relatorio.Relatorio;
 
-
 public class Coordenador extends Usuario {
 
     private static final ArrayList<Coordenador> coordenadores = new ArrayList<>();
@@ -142,6 +141,7 @@ public class Coordenador extends Usuario {
         
         Coordenador coordenador = new Coordenador(nome, area, login, password);
         coordenadores.add(coordenador);
+        UsuarioRepositorio.adicionarUsuario(coordenador);
         return true;
     }
 

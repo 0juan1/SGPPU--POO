@@ -118,6 +118,7 @@ public class Aluno extends Usuario {
         
         Aluno aluno = new Aluno(nome, curso, login, password);
         alunos.add(aluno);
+        UsuarioRepositorio.adicionarUsuario(aluno);
         return true;
     }
 

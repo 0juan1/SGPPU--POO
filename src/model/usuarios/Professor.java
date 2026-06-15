@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import model.notificacao.NotificacaoMensagem;
 import model.notificacao.NotificacaoRepositorio;
 import model.projetos.ProjetoPesquisa;
+import model.projetos.ProjetoRepositorio;
 import model.relatorio.Relatorio;
 
 public class Professor extends Usuario {
@@ -49,6 +50,7 @@ public class Professor extends Usuario {
 
         ProjetoPesquisa projeto = new ProjetoPesquisa(nome, orientador, area, descricao, datainicio);
         ProjetoPesquisa.getProjetos().add(projeto);
+        ProjetoRepositorio.adicionarProjeto(projeto);
     } 
 
     public ProjetoPesquisa editarProjeto(String nomeProjeto, String novoNome, Professor novoOrientador, String novaArea, String novaDescricao, LocalDate novaDataInicio) {
@@ -89,7 +91,10 @@ public class Professor extends Usuario {
             if (novaDataInicio != null) {
                 projetoEncontrado.setDataInicio(novaDataInicio);
             }
-        return projetoEncontrado; 
+            
+        ProjetoPesquisa projetoEditado = projetoEncontrado;
+        ProjetoRepositorio.adicionarProjeto(projetoEditado);
+        return projetoEditado; 
     } 
 
     public void acompanharProgressos(String nomeProjeto) {
@@ -192,6 +197,7 @@ public class Professor extends Usuario {
         
         Professor professor = new Professor(nome, area, login, password);
         professores.add(professor);
+        UsuarioRepositorio.adicionarUsuario(professor);
         return true;
     }
 

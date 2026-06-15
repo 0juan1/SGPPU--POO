@@ -31,6 +31,7 @@ public class Relatorio {
     public static Relatorio criar(Aluno autor, ProjetoPesquisa projeto, String conteudo) {
         Relatorio relatorio = new Relatorio(autor, projeto, conteudo);
         projeto.adicionarRelatorio(relatorio);
+        RelatorioRepositorio.adicionarRelatorio(relatorio);
         return relatorio;
     }
 
