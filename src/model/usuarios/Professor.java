@@ -97,29 +97,24 @@ public class Professor extends Usuario {
         return projetoEditado; 
     } 
 
-    public void acompanharProgressos(String nomeProjeto) {
-        // busca o projeto pelo nome e exibe o progresso dos participantes
-        if (nomeProjeto == null || nomeProjeto.isBlank()) {
-            throw new IllegalArgumentException("Nome do projeto inválido!");
+    public void acompanharProgresso() {
+        if (ProjetoPesquisa.getProjetos().isEmpty()) {
+            System.out.println("Nenhum projeto cadastrado!");
+            return;
         }
-
-        ProjetoPesquisa projetoEncontrado = null;
+        
+        // exibe o progresso de todos os projetos
+        System.out.println("Acompanhando progresso de TODOS os projetos:");
+        System.out.println("================================================");
+        
         for (ProjetoPesquisa projeto : ProjetoPesquisa.getProjetos()) {
-            if (nomeProjeto.equals(projeto.getNome())) {
-                projetoEncontrado = projeto;
-                break;
-            }
+            System.out.println("Projeto: " + projeto.getNome());
+            System.out.println("Orientador: " + (projeto.getOrientador() != null ? projeto.getOrientador().getNome() : "N/A"));
+            System.out.println("Área: " + projeto.getArea());
+            System.out.println("Data de início: " + projeto.getDataInicio());
+            projeto.exibirParticipantes();
+            System.out.println("------------------------------------------------");
         }
-
-        if (projetoEncontrado == null) {
-            throw new IllegalArgumentException("Projeto não encontrado: " + nomeProjeto);
-        }
-
-        System.out.println("Acompanhando progresso do projeto: " + projetoEncontrado.getNome());
-        System.out.println("Orientador: " + projetoEncontrado.getOrientador().getNome());
-        System.out.println("Área: " + projetoEncontrado.getArea());
-        System.out.println("Data de início: " + projetoEncontrado.getDataInicio());
-        projetoEncontrado.exibirParticipantes();
     } 
 
     public void validarRelatorios(String nomeProjeto) {

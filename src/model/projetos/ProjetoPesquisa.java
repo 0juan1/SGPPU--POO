@@ -35,6 +35,7 @@ public class ProjetoPesquisa {
         return projetos;
     }
     
+    
     public ArrayList<Aluno> getSolicitantes() {
         return solicitantes;
     }
@@ -66,7 +67,7 @@ public class ProjetoPesquisa {
     public String getArea() {
         return area;
     }
-
+    
     public void setArea(String area) {
         this.area = area;
     }
@@ -74,19 +75,37 @@ public class ProjetoPesquisa {
     public String getDescricao() {
         return descricao;
     }
-
+    
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
-
+    
     public LocalDate getDataInicio() {
         return dataInicio;
     }
-
+    
     public void setDataInicio(LocalDate dataInicio) {
         this.dataInicio = dataInicio;
     }
+
+    public static void exibirProjetos() {
+        if (projetos.isEmpty()) {
+            System.out.println("Nenhum projeto cadastrado!");
+            return;
+        }
+
+        System.out.println("PROJETOS DISPONIVEIS:");
+        for (ProjetoPesquisa projeto : projetos) {
+            System.out.println("----------------------------------------");
+            System.out.println("Nome: " + projeto.getNome());
+            System.out.println("Orientador: " + (projeto.getOrientador() != null ? projeto.getOrientador().getNome() : "N/A"));
+            System.out.println("Área: " + projeto.getArea());
+            System.out.println("Descrição: " + projeto.getDescricao());
+            System.out.println("Data de início: " + projeto.getDataInicio());
+        }
+    }
     
+    // quando um relatorio é criado ele adiciona ao array de relatorios
     public void adicionarRelatorio(Relatorio relatorio) {
         if (relatorio == null) {
             throw new IllegalArgumentException("Relatório inválido!");

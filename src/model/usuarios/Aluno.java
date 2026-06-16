@@ -130,6 +130,7 @@ public class Aluno extends Usuario {
         
         for (Aluno alun : alunos) {
             if (login.equals(alun.getLogin()) && password.equals(alun.getPassword())) {
+                alun.setStatus(AlunoStatus.ATIVO);
                 return true;
             }
         }
