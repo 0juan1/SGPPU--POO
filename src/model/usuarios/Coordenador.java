@@ -76,6 +76,15 @@ public class Coordenador extends Usuario {
 
         // remove o projeto do arraylist de projetos
         ProjetoPesquisa.getProjetos().remove(projetoEncontrado);
+
+        // Cria notificação com informações do projeto excluído
+        String titulo = "Projeto Excluído";
+        String conteudo = "O projeto '" + projetoEncontrado.getNome() + "' foi excluído pelo coordenador.\n" +
+                        "Área: " + projetoEncontrado.getArea() + "\n" +
+                        "Orientador: " + projetoEncontrado.getOrientador().getNome() + "\n" +
+                        "Participantes removidos: " + projetoEncontrado.getParticipantes().size();
+        criarNotificacao(titulo, conteudo);
+        
         return true;
     }
 
@@ -103,6 +112,27 @@ public class Coordenador extends Usuario {
                 System.out.println("Validade: " + (relatorio.isValido() ? "Válido" : "Inválido"));
             }
         }
+    }
+
+    public void exibirEstatisticas() {
+        int totalProjetos = ProjetoPesquisa.getProjetos().size();
+        int totalParticipantes = ProjetoPesquisa.getProjetos().stream().mapToInt(projeto -> projeto.getParticipantes().size()).sum();
+        int totalProfessores = 0;
+        int totalCoordenadores = 0;
+
+        for (Usuario usuario : UsuarioRepositorio.getUsuarios()) {
+            if (usuario instanceof Professor) {
+                totalProfessores++;
+            } else if (usuario instanceof Coordenador) {
+                totalCoordenadores++;
+            }
+        }
+
+        System.out.println("=== ESTATÍSTICAS GERAIS DO SISTEMA ===");
+        System.out.println("Total de projetos: " + totalProjetos);
+        System.out.println("Total de participantes: " + totalParticipantes);
+        System.out.println("Total de professores: " + totalProfessores);
+        System.out.println("Total de coordenadores: " + totalCoordenadores);
     }
     
     public void criarNotificacao(String titulo, String conteudo) {

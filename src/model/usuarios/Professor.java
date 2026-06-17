@@ -51,6 +51,15 @@ public class Professor extends Usuario {
         ProjetoPesquisa projeto = new ProjetoPesquisa(nome, orientador, area, descricao, datainicio);
         ProjetoPesquisa.getProjetos().add(projeto);
         ProjetoRepositorio.adicionarProjeto(projeto);
+        
+        // Criar notificação com informações do novo projeto
+        String titulo = "Novo Projeto Criado";
+        String conteudo = "Projeto: " + nome + "\n" +
+                        "Área: " + area + "\n" +
+                        "Orientador: " + orientador.getNome() + "\n" +
+                        "Data de Início: " + datainicio + "\n" +
+                        "Descrição: " + descricao;
+        criarNotificacao(titulo, conteudo);
     } 
 
     public ProjetoPesquisa editarProjeto(String nomeProjeto, String novoNome, Professor novoOrientador, String novaArea, String novaDescricao, LocalDate novaDataInicio) {
@@ -94,6 +103,16 @@ public class Professor extends Usuario {
             
         ProjetoPesquisa projetoEditado = projetoEncontrado;
         ProjetoRepositorio.adicionarProjeto(projetoEditado);
+        
+        // Criar notificação com informações do projeto editado
+        String titulo = "Projeto Editado";
+        String conteudo = "Projeto: " + projetoEditado.getNome() + "\n" +
+                         "Área: " + projetoEditado.getArea() + "\n" +
+                         "Orientador: " + projetoEditado.getOrientador().getNome() + "\n" +
+                         "Data de Início: " + projetoEditado.getDataInicio() + "\n" +
+                         "Descrição: " + projetoEditado.getDescricao();
+        criarNotificacao(titulo, conteudo);
+        
         return projetoEditado; 
     } 
 
@@ -135,7 +154,6 @@ public class Professor extends Usuario {
             throw new IllegalArgumentException("Projeto não encontrado!");
         }
 
-        //adiciona o relatorio ao array de relatorios do projeto
         ArrayList<Relatorio> relatoriosProjeto = projetoEncontrado.getRelatorios();
 
         if (relatoriosProjeto.isEmpty()) {
@@ -145,7 +163,7 @@ public class Professor extends Usuario {
 
         System.out.println("Validando relatórios do projeto: " + nomeProjeto);
         for (Relatorio relatorio : relatoriosProjeto) {
-            boolean valido = relatorio.isValido();// verifica se o conteudo é nulo
+            boolean valido = relatorio.isValido(); // verifica se o conteudo é nulo
             System.out.println("Autor: " + relatorio.getAutor().getNome());
             System.out.println("Conteúdo: " + (relatorio.getConteudo() == null ? "Nulo" : relatorio.getConteudo()));
             System.out.println("Status: " + (valido ? "Válido" : "Inválido"));
