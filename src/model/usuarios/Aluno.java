@@ -76,7 +76,7 @@ public class Aluno extends Usuario {
             }
 
         if (inscricoes.isEmpty()) {
-            System.out.println("O aluno  " + this.getNome() + "Você não está inscrito em nenhum projeto!");
+            System.out.println("O aluno  " + this.getNome() + " não está inscrito em nenhum projeto!");
             return;
         }
 
